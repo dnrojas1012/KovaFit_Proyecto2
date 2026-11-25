@@ -1,0 +1,38 @@
+<%- include('../partials/header') %>
+<div class="encabezado">
+  <h1>Usuarios</h1>
+  <% if (usuario.rol === 'SuperAdmin') { %><a class="boton" href="/usuarios/nuevo">+ Nuevo usuario</a><% } %>
+</div>
+<%- include('../partials/mensaje') %>
+<% if (usuario.rol !== 'SuperAdmin') { %><p class="alerta info">Solo el SuperAdmin puede crear, editar o borrar usuarios.</p><% } %>
+<div class="tabla-scroll">
+<table>
+  <thead><tr><th>Usuario</th><th>Identificación</th><th>Nombre</th><th>Rol</th><th>Permisos del rol</th><th>Último inicio de sesión</th><th>Estado</th>
+    <% if (usuario.rol === 'SuperAdmin') { %><th>Acciones</th><% } %></tr></thead>
+  <tbody>
+  <% usuarios.forEach(function (u) { %>
+    <tr>
+      <td><%= u.username %></td>
+      <td><%= u.identificacion %></td>
+      <td><%= u.nombre %></td>
+      <td><span class="etiqueta"><%= u.rol.nombre %></span></td>
+      <td><%= u.rol.permisos.length ? u.rol.permisos.map(function (p) { return p.nombre; }).join(', ') : 'Solo lectura' %></td>
+      <td><%= fechaHora(u.ultimo_login) %></td>
+      <td><span class="estado <%= u.activo ? 'vigente' : 'vencida' %>"><%= u.activo ? 'Activo' : 'Inactivo' %></span></td>
+      <% if (usuario.rol === 'SuperAdmin') { %>
+      <td class="acciones">
+        <a href="/usuarios/<%= u.id %>/editar">Editar</a>
+        <% if (u.id !== usuario.id) { %>
+        <form method="post" action="/usuarios/<%= u.id %>/eliminar" class="en-linea" data-confirmar="¿Borrar al usuario <%= u.username %>?">
+          <%- include('../partials/csrf') %>
+          <button type="submit" class="enlace peligro">Borrar</button>
+        </form>
+        <% } %>
+      </td>
+      <% } %>
+    </tr>
+  <% }) %>
+  </tbody>
+</table>
+</div>
+<%- include('../partials/footer') %>

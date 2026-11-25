@@ -36,6 +36,7 @@ app.use('/clientes', require('./rutas/clientes'));
 app.use('/membresias', require('./rutas/membresias'));
 app.use('/asistencia', require('./rutas/asistencia'));
 app.use('/reportes', require('./rutas/reportes'));
+app.use('/usuarios', require('./rutas/usuarios'));
 // RUTAS-SIGUIENTES
 
 // Página no encontrada y errores
