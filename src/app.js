@@ -32,6 +32,7 @@ app.use((req, res, next) => {   // mensaje de "guardado", "borrado"...
 app.use(require('./rutas/auth'));  // login y logout: lo único público
 app.use(seg.requiereSesion);  // 5. De aquí en adelante, todo exige sesión
 app.use('/', require('./rutas/inicio'));
+app.use('/clientes', require('./rutas/clientes'));
 // RUTAS-SIGUIENTES
 
 // Página no encontrada y errores
