@@ -1,0 +1,4 @@
+<%# Mensaje verde o rojo después de guardar, borrar, etc. %>
+<% if (typeof aviso !== 'undefined' && aviso) { %>
+  <p class="alerta <%= aviso.tipo %>" role="status"><%= aviso.texto %></p>
+<% } %>

@@ -1,0 +1,50 @@
+<%- include('partials/header') %>
+<div class="encabezado">
+  <div>
+    <p class="antetitulo">Tu gimnasio, bajo control</p>
+    <h1>Hola, <%= usuario.nombre.split(' ')[0] %></h1>
+    <p class="nota">Este es el resumen de hoy.</p>
+  </div>
+  <span class="pastilla grande"><%= fechaLarga %></span>
+</div>
+
+<div class="tarjetas">
+  <a class="dato" href="/asistencia"><span class="dato-texto">Entradas de hoy</span><span class="dato-numero"><%= resumen.entradasHoy %></span><span class="nota">Ingresos registrados</span></a>
+  <a class="dato" href="/membresias"><span class="dato-texto">Membresías vigentes</span><span class="dato-numero"><%= resumen.vigentes %></span><span class="nota">Clientes con acceso activo</span></a>
+  <a class="dato ambar" href="<%= usuario.permisos.includes('VER_REPORTES') ? '/reportes/por-vencer' : '/membresias' %>"><span class="dato-texto">Vencen en 7 días</span><span class="dato-numero"><%= resumen.porVencer %></span><span class="nota">Membresías por renovar</span></a>
+  <a class="dato" href="/clientes"><span class="dato-texto">Clientes</span><span class="dato-numero"><%= resumen.clientes %></span><span class="nota">Registrados en el gimnasio</span></a>
+</div>
+
+<% if (usuario.permisos.includes('CREAR')) { %>
+<h2>Acciones rápidas</h2>
+<div class="acciones-rapidas">
+  <a class="accion principal" href="/asistencia"><strong>Registrar entrada</strong><span>Da la bienvenida a tus clientes</span></a>
+  <a class="accion" href="/membresias/nueva"><strong>Vender membresía</strong><span>Activa un nuevo plan</span></a>
+  <a class="accion" href="/clientes/nuevo"><strong>Nuevo cliente</strong><span>Registra a alguien nuevo</span></a>
+</div>
+<% } else { %>
+<p class="alerta info">Su rol (<%= usuario.rol %>) es de solo lectura: puede consultar, pero no crear, editar ni borrar.</p>
+<% } %>
+
+<div class="dos-columnas">
+  <section class="tarjeta">
+    <h2>Últimas entradas</h2>
+    <table>
+      <thead><tr><th>Cliente</th><th>Hora</th></tr></thead>
+      <tbody>
+      <% entradas.forEach(function (e) { %>
+        <tr><td><%= e.cliente.nombre %></td><td><%= new Date(e.hora).toLocaleTimeString('es-CR', { timeZone: 'America/Costa_Rica', hour: '2-digit', minute: '2-digit' }) %></td></tr>
+      <% }) %>
+      <% if (!entradas.length) { %><tr><td colspan="2" class="nota">Todavía no hay entradas hoy.</td></tr><% } %>
+      </tbody>
+    </table>
+  </section>
+  <section class="tarjeta">
+    <h2>Próximas a vencer</h2>
+    <% proximas.forEach(function (m) { var d = dias(m.fecha_vencimiento); %>
+      <div class="fila-lista"><span><strong><%= m.cliente.nombre %></strong><small>Plan <%= m.plan.toLowerCase() %></small></span><span class="estado por-vencer"><%= d === 0 ? 'Hoy' : 'En ' + d + (d === 1 ? ' día' : ' días') %></span></div>
+    <% }) %>
+    <% if (!proximas.length) { %><p class="nota">Ninguna vence en los próximos 7 días.</p><% } %>
+  </section>
+</div>
+<%- include('partials/footer') %>

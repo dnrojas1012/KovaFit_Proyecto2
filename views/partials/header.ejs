@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= titulo %> · Kova Fit</title>
+  <meta name="csrf-token" content="<%= csrfToken %>">
+  <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body class="<%= usuario ? 'con-menu' : 'sin-menu' %>"<% if (usuario) { %> data-timeout="<%= segundos %>"<% } %>>
+<% if (usuario) {
+  var activo = function (p) { return (p === '/' ? ruta === '/' : ruta.indexOf(p) === 0) ? 'activo' : ''; };
+  var puede = function (p) { return usuario.permisos.includes(p); };
+%>
+<aside class="lateral">
+  <a class="marca" href="/">
+    <span class="logo">K</span>
+    <span><strong>Kova Fit</strong><small>Control y confianza</small></span>
+  </a>
+  <div class="perfil">
+    <span class="avatar"><%= usuario.nombre.charAt(0) %></span>
+    <span><strong><%= usuario.nombre %></strong><small><%= usuario.rol %></small></span>
+  </div>
+  <nav class="menu">
+    <p class="menu-titulo">Gimnasio</p>
+    <a class="<%= activo('/') %>" href="/">Inicio</a>
+    <a class="<%= activo('/asistencia') %>" href="/asistencia">Registrar entrada</a>
+    <a class="<%= activo('/clientes') %>" href="/clientes">Clientes</a>
+    <a class="<%= activo('/membresias') %>" href="/membresias">Membresías</a>
+    <% if (puede('VER_REPORTES')) { %><a class="<%= activo('/reportes') %>" href="/reportes/por-vencer">Por vencer</a><% } %>
+    <p class="menu-titulo">Administración</p>
+    <a class="<%= activo('/usuarios') %>" href="/usuarios">Usuarios</a>
+    <% if (usuario.rol === 'SuperAdmin') { %>
+      <a class="<%= activo('/roles') %>" href="/roles">Roles y permisos</a>
+      <a class="<%= activo('/bitacora') %>" href="/bitacora">Bitácora</a>
+    <% } %>
+  </nav>
+  <form method="post" action="/logout">
+    <%- include('csrf') %>
+    <button type="submit" class="salir">Cerrar sesión</button>
+  </form>
+</aside>
+<% } %>
+<main class="contenido">
+<% if (usuario) { %>
+  <div class="barra-superior">
+    <span class="miga">Kova Fit / <strong><%= titulo %></strong></span>
+    <span class="nota">La sesión se cierra tras <%= segundos %> s sin actividad <span class="pastilla"><span id="contador"><%= segundos %></span> s</span></span>
+  </div>
+<% } %>

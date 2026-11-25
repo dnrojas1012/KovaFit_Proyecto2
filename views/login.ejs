@@ -1,0 +1,18 @@
+<%- include('partials/header') %>
+<section class="tarjeta login">
+  <div class="marca-login"><span class="logo">K</span><span><strong>Kova Fit</strong><small>Control y confianza</small></span></div>
+  <h1>Bienvenido de nuevo</h1>
+  <p class="subtitulo">Ingrese sus datos para continuar</p>
+  <% if (expirada) { %><p class="alerta info">Su sesión se cerró por inactividad. Ingrese de nuevo.</p><% } %>
+  <% if (requiere) { %><p class="alerta info">Debe iniciar sesión para acceder a esa página.</p><% } %>
+  <% if (error) { %><p class="alerta error" role="alert"><%= error %></p><% } %>
+  <form method="post" action="/login" autocomplete="off" class="formulario">
+    <%- include('partials/csrf') %>
+    <label for="username">Usuario</label>
+    <input id="username" name="username" maxlength="30" required autofocus value="<%= username %>" placeholder="Su usuario">
+    <label for="password">Contraseña</label>
+    <input id="password" name="password" type="password" maxlength="128" required placeholder="Ingrese su contraseña">
+    <button type="submit" class="boton" id="btn-ingresar">Ingresar →</button>
+  </form>
+</section>
+<%- include('partials/footer') %>
