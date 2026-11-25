@@ -1,0 +1,16 @@
+<%- include('../partials/header') %>
+<h1><%= titulo %></h1>
+<form method="post" action="<%= typeof id !== 'undefined' && id ? '/roles/' + id : '/roles' %>" class="tarjeta formulario">
+  <%- include('../partials/csrf') %>
+  <%- include('../partials/errores') %>
+  <label for="nombre">Nombre del rol</label>
+  <input id="nombre" name="nombre" maxlength="50" required value="<%= datos.nombre || '' %>" <%= typeof sistema !== 'undefined' && sistema ? 'readonly' : '' %>>
+  <label for="descripcion">Descripción</label>
+  <input id="descripcion" name="descripcion" maxlength="200" value="<%= datos.descripcion || '' %>">
+  <label>Permisos</label>
+  <% permisos.forEach(function (p) { %>
+    <label class="check"><input type="checkbox" name="permisos" value="<%= p.id %>" <%= ids.includes(p.id) ? 'checked' : '' %>> <%= p.nombre %></label>
+  <% }) %>
+  <div class="atajos"><button type="submit" class="boton">Guardar</button><a class="boton secundario" href="/roles">Cancelar</a></div>
+</form>
+<%- include('../partials/footer') %>

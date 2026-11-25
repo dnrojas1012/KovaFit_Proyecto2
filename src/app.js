@@ -37,6 +37,8 @@ app.use('/membresias', require('./rutas/membresias'));
 app.use('/asistencia', require('./rutas/asistencia'));
 app.use('/reportes', require('./rutas/reportes'));
 app.use('/usuarios', require('./rutas/usuarios'));
+app.use('/roles', require('./rutas/roles'));
+app.use('/bitacora', require('./rutas/bitacora'));
 // RUTAS-SIGUIENTES
 
 // Página no encontrada y errores

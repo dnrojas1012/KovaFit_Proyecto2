@@ -1,0 +1,32 @@
+<%- include('../partials/header') %>
+<div class="encabezado">
+  <h1>Roles y permisos</h1>
+  <a class="boton" href="/roles/nuevo">+ Nuevo rol</a>
+</div>
+<%- include('../partials/mensaje') %>
+<p class="nota">Los permisos se asignan al rol. Todo usuario con ese rol los recibe.</p>
+<div class="tabla-scroll">
+<table>
+  <thead><tr><th>Rol</th><th>Descripción</th><% todos.forEach(function (p) { %><th class="centro"><%= p.nombre %></th><% }) %><th>Usuarios</th><th>Acciones</th></tr></thead>
+  <tbody>
+  <% roles.forEach(function (r) { const tiene = r.permisos.map(function (p) { return p.id; }); %>
+    <tr>
+      <td><strong><%= r.nombre %></strong></td>
+      <td><%= r.descripcion %></td>
+      <% todos.forEach(function (p) { %><td class="centro"><%= tiene.includes(p.id) ? '✔' : '—' %></td><% }) %>
+      <td><%= r.Usuarios.length %></td>
+      <td class="acciones">
+        <a href="/roles/<%= r.id %>/editar">Editar</a>
+        <% if (!r.es_sistema) { %>
+        <form method="post" action="/roles/<%= r.id %>/eliminar" class="en-linea" data-confirmar="¿Borrar el rol <%= r.nombre %>?">
+          <%- include('../partials/csrf') %>
+          <button type="submit" class="enlace peligro">Borrar</button>
+        </form>
+        <% } %>
+      </td>
+    </tr>
+  <% }) %>
+  </tbody>
+</table>
+</div>
+<%- include('../partials/footer') %>
