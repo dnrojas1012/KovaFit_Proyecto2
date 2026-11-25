@@ -1,0 +1,35 @@
+<%- include('../partials/header') %>
+<h1>Registrar entrada</h1>
+<div class="tarjeta">
+  <% if (usuario.permisos.includes('CREAR')) { %>
+  <form method="post" action="/asistencia" class="formulario">
+    <%- include('../partials/csrf') %>
+    <label for="cedula">Cédula del cliente</label>
+    <input id="cedula" name="cedula" maxlength="20" value="<%= cedula %>" autofocus required placeholder="Ej.: 2-0705-0505">
+    <button type="submit" class="boton grande">Registrar entrada</button>
+  </form>
+  <% } else { %>
+  <p class="nota">Su rol puede ver las entradas, pero no registrarlas.</p>
+  <% } %>
+  <% if (resultado) { %>
+    <p class="alerta <%= resultado.ok ? 'ok' : 'error' %>" role="status" id="resultado-entrada"><%= resultado.texto %></p>
+  <% } %>
+</div>
+
+<h2>Entradas de hoy (<%= entradas.length %>)</h2>
+<div class="tabla-scroll">
+<table>
+  <thead><tr><th>Hora</th><th>Cliente</th><th>Membresía</th></tr></thead>
+  <tbody>
+  <% entradas.forEach(function (e) { %>
+    <tr>
+      <td><%= new Date(e.hora).toLocaleTimeString('es-CR', { timeZone: 'America/Costa_Rica', hour: '2-digit', minute: '2-digit' }) %></td>
+      <td><%= e.cliente.nombre %></td>
+      <td><%= e.membresia.codigo %></td>
+    </tr>
+  <% }) %>
+  <% if (!entradas.length) { %><tr><td colspan="3" class="nota">Todavía no hay entradas hoy.</td></tr><% } %>
+  </tbody>
+</table>
+</div>
+<%- include('../partials/footer') %>

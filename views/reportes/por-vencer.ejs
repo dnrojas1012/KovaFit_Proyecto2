@@ -1,0 +1,25 @@
+<%- include('../partials/header') %>
+<div class="encabezado">
+  <h1>Membresías por vencer</h1>
+</div>
+<p class="nota">Vencen entre el <%= desde.split('-').reverse().join('/') %> y el <%= hasta.split('-').reverse().join('/') %> (próximos 7 días). Llame al cliente y ofrezca la renovación.</p>
+<div class="tabla-scroll">
+<table>
+  <thead><tr><th>Cliente</th><th>Teléfono</th><th>Membresía</th><th>Plan</th><th>Vence</th><th>Faltan</th><th>Acción</th></tr></thead>
+  <tbody>
+  <% membresias.forEach(function (m) { const d = dias(m.fecha_vencimiento); %>
+    <tr>
+      <td><%= m.cliente.nombre %></td>
+      <td><%= m.cliente.telefono %></td>
+      <td><%= m.codigo %></td>
+      <td><%= m.plan.charAt(0) + m.plan.slice(1).toLowerCase() %></td>
+      <td><%= m.fecha_vencimiento.split('-').reverse().join('/') %></td>
+      <td><span class="estado por-vencer"><%= d === 0 ? 'Vence hoy' : d === 1 ? '1 día' : d + ' días' %></span></td>
+      <td><% if (usuario.permisos.includes('CREAR')) { %><a href="/membresias/<%= m.id %>/renovar">Renovar</a><% } %></td>
+    </tr>
+  <% }) %>
+  <% if (!membresias.length) { %><tr><td colspan="7" class="nota">Ninguna membresía vence en los próximos 7 días.</td></tr><% } %>
+  </tbody>
+</table>
+</div>
+<%- include('../partials/footer') %>

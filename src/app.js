@@ -34,6 +34,8 @@ app.use(seg.requiereSesion);  // 5. De aquí en adelante, todo exige sesión
 app.use('/', require('./rutas/inicio'));
 app.use('/clientes', require('./rutas/clientes'));
 app.use('/membresias', require('./rutas/membresias'));
+app.use('/asistencia', require('./rutas/asistencia'));
+app.use('/reportes', require('./rutas/reportes'));
 // RUTAS-SIGUIENTES
 
 // Página no encontrada y errores
