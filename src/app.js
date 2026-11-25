@@ -33,6 +33,7 @@ app.use(require('./rutas/auth'));  // login y logout: lo único público
 app.use(seg.requiereSesion);  // 5. De aquí en adelante, todo exige sesión
 app.use('/', require('./rutas/inicio'));
 app.use('/clientes', require('./rutas/clientes'));
+app.use('/membresias', require('./rutas/membresias'));
 // RUTAS-SIGUIENTES
 
 // Página no encontrada y errores
